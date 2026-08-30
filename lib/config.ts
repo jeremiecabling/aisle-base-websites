@@ -32,14 +32,8 @@ function lastKnownGood(): LkgStore {
   return g.__tenantConfigLkg
 }
 
-function platformApiUrl(): string {
-  const url = process.env.PLATFORM_API_URL?.trim()
-  if (!url) {
-    throw new Error(
-      "PLATFORM_API_URL is not set. Non-fixture tenants cannot be served — see .env.example.",
-    )
-  }
-  return url
+function platformApiUrl(): string | null {
+  return process.env.PLATFORM_API_URL?.trim() || null
 }
 
 /** React-cached so layout + page share one lookup per request. */
@@ -53,7 +47,18 @@ async function getTenantConfigUncached(slug: string): Promise<TenantConfig | nul
     return getFixtureConfig(slug)
   }
 
-  const url = new URL(platformApiUrl())
+  const apiUrl = platformApiUrl()
+  if (!apiUrl) {
+    // Fixtures-only mode: a deployment without PLATFORM_API_URL is the
+    // legitimate pre-Google-wiring state (Days 2-5 milestone). Unknown slugs
+    // are a 404, not a crash — but say so where the operator will look.
+    console.error(
+      `[tenant-config] ${slug}: PLATFORM_API_URL is not set (fixtures-only mode) — serving 404. See .env.example.`,
+    )
+    return null
+  }
+
+  const url = new URL(apiUrl)
   url.searchParams.set("action", "config")
   url.searchParams.set("site", slug)
   const secret = process.env.PLATFORM_API_SECRET?.trim()
