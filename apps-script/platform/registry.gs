@@ -137,13 +137,19 @@ function findClient_(slug) {
 /**
  * Term enforcement (§7.2): a past expires_at serves as expired regardless of
  * the status cell. Computed at read time — no write-back from the serving
- * path (doGet must stay read-only and fast).
+ * path (doGet must stay read-only and fast). Applies to the two RENDERING
+ * states, active AND staging — staging renders the full site for preview
+ * (docs/DECISIONS.md #6), so a forgotten preview must not outlive its term.
  */
 function effectiveStatus_(client) {
   var status = client.status || "staging";
   var known = ["active", "paused", "expired", "staging"];
   if (known.indexOf(status) === -1) status = "paused";
-  if (client.expires_at && client.expires_at.getTime() < Date.now() && status === "active") {
+  if (
+    client.expires_at &&
+    client.expires_at.getTime() < Date.now() &&
+    (status === "active" || status === "staging")
+  ) {
     return "expired";
   }
   return status;

@@ -14,14 +14,35 @@ function handleAdminEdit(e) {
     var sheetName = e.range.getSheet().getName();
 
     if (sheetName === ADMIN_TABS.CLIENTS) {
-      var row = e.range.getRow();
-      if (row === 1) return; // header edits don't affect payloads
-      var slug = str_(e.range.getSheet().getRange(row, 1).getValue()).toLowerCase();
-      if (slug && isValidSlug_(slug)) {
-        flushClientCache_(slug);
-      } else {
-        flushAllCache_(); // slug itself may have been edited — flush wide
+      var sheet = e.range.getSheet();
+      var firstRow = e.range.getRow();
+      var lastRow = e.range.getLastRow();
+      if (firstRow === 1 && lastRow === 1) return; // header-only edits don't affect payloads
+
+      // Slug column by header NAME (headerColumn_, menu.gs) — column A is not
+      // guaranteed to be slug if the operator reordered columns, and flushing
+      // the wrong key would leave real edits stale. Any doubt → flush wide;
+      // a too-broad flush costs one uncached rebuild, a too-narrow one costs
+      // hours of stale config.
+      var slugColumn;
+      try {
+        slugColumn = headerColumn_(sheet, "slug");
+      } catch (err) {
+        flushAllCache_();
+        return;
       }
+
+      // A paste/fill can span rows — flush every edited row's slug.
+      var flushWide = false;
+      for (var row = Math.max(firstRow, 2); row <= lastRow; row++) {
+        var slug = str_(sheet.getRange(row, slugColumn).getValue()).toLowerCase();
+        if (slug && isValidSlug_(slug)) {
+          flushClientCache_(slug);
+        } else {
+          flushWide = true; // slug cell blank/invalid — may itself have been edited
+        }
+      }
+      if (flushWide) flushAllCache_();
       return;
     }
 

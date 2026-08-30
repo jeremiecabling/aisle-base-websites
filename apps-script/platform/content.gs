@@ -245,9 +245,18 @@ function assembleConfigPayload_(client) {
   };
 
   if (client.mod_password_gate) {
-    if (!client.gate_password) warnings.push("password gate entitled but gate_password is empty");
+    // FAIL CLOSED: entitled = enabled, even with an empty password. An
+    // accidentally cleared gate_password must never quietly expose the site —
+    // enabled+empty fails the Next-side schema, so the platform serves
+    // last-known-good (still gated) and the warning/health action names the
+    // fix. Turning the gate OFF is unchecking mod_password_gate.
+    if (!client.gate_password) {
+      warnings.push(
+        "password gate entitled but gate_password is empty — site will fail closed (serve last-known-good) until it is set or mod_password_gate is unchecked"
+      );
+    }
     payload.gate = {
-      enabled: client.gate_password !== "",
+      enabled: true,
       password: client.gate_password,
       password_version: client.gate_password_version,
     };
