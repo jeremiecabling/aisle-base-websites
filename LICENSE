@@ -1,0 +1,15 @@
+Copyright (c) 2026 Jeremie Cabling. All rights reserved.
+
+This software and its source code are proprietary. They power a hosted
+wedding-website service: the operator hosts and manages deployments; clients
+(couples) receive a license to use their configured website for the term of
+their service agreement. No part of this repository may be copied, modified,
+distributed, sublicensed, or used to operate a competing service without
+prior written permission from the copyright holder.
+
+Client-supplied content (photos, text, media) remains the property of the
+respective clients.
+
+Bundled fonts under public/fonts/ are NOT covered by this license; each font
+directory contains its own SIL Open Font License (OFL.txt) and is
+redistributed under those terms.

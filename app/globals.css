@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/*
+ * Tenant theme bridge.
+ *
+ * The tenant layout injects per-tenant values for the raw custom properties
+ * below (see lib/theme.ts). @theme inline maps them into Tailwind utilities
+ * so section components write `bg-canvas`, `text-ink`, `font-display`, etc.
+ * — never hardcoded stone-* literals (HANDOFF §7.1).
+ *
+ * The :root defaults ARE the live site's design (terracotta preset): soft
+ * orange accent, stone neutral scale, square editorial shape (radius 0).
+ * Non-tenant pages (apex landing, error pages) render with these defaults.
+ */
+:root {
+  --accent: #f28c52;
+  --bg: #ffffff;
+  --bg-alt: #fafaf9;
+  --text: #292524;
+  --text-muted: #57534e;
+  --button-bg: #292524;
+  --radius: 0px;
+  --font-display: "Great Vibes", cursive;
+  --font-body: "Cormorant Garamond", Georgia, serif;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-canvas: var(--bg);
+  --color-canvas-alt: var(--bg-alt);
+  --color-ink: var(--text);
+  --color-ink-muted: var(--text-muted);
+  --color-button: var(--button-bg);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --radius-tenant: var(--radius);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/*
+ * Motion vocabulary from the live design (HANDOFF §3):
+ * - 1s fade+rise entrance (gate + hero content)
+ * - Radix accordion open/close with height keyframes
+ */
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-rise {
+  animation: fade-rise 1s ease-out both;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.accordion-content[data-state="open"] {
+  animation: accordion-down 0.3s ease-out;
+}
+
+.accordion-content[data-state="closed"] {
+  animation: accordion-up 0.3s ease-out;
+}
+
+/*
+ * Hide iOS Safari's native start/play overlay on background videos. When the
+ * browser declines to autoplay (e.g. Low Power Mode) it otherwise renders a
+ * large play glyph behind the gate overlay that looks broken and can't be
+ * tapped; playback starts on first user gesture instead (live PR #20).
+ */
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls {
+  display: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
