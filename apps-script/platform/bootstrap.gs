@@ -181,10 +181,19 @@ function bootstrapAdminTabs_(report) {
   report.push("Clients tab: " + (clients.created ? "created" : "exists — left alone"));
 }
 
-/** Get-or-insert a tab. `created` gates all header/validation/format writes. */
+/**
+ * Get-or-insert a tab. `created` gates all header/validation/format writes.
+ * An existing but completely EMPTY tab (operator pre-created it, or a prior
+ * build threw mid-run) counts as created — otherwise a half-built tab would
+ * report "exists — left alone" forever and the advertised re-runnability
+ * would not hold.
+ */
 function ensureSheet_(spreadsheet, name) {
   var sheet = spreadsheet.getSheetByName(name);
-  if (sheet) return { sheet: sheet, created: false };
+  if (sheet) {
+    var isEmpty = sheet.getLastRow() === 0 && sheet.getLastColumn() === 0;
+    return { sheet: sheet, created: isEmpty };
+  }
   return { sheet: spreadsheet.insertSheet(name), created: true };
 }
 
@@ -330,6 +339,15 @@ function buildOpsTab_(sheet) {
 }
 
 function ensureOpsKeys_(sheet, report) {
+  // Repair the header first: readOps_/readTable_ key rows off row 1 being
+  // ["key","value"], and opsRowIndex_ scans from row 2 — seeding into a
+  // header-less tab would turn a seed row INTO the header and quietly break
+  // every Ops read (and re-create templates on every bootstrap re-run).
+  if (str_(sheet.getRange(1, 1).getValue()) !== "key") {
+    sheet.insertRowBefore(1);
+    sheet.getRange(1, 1, 1, 2).setValues([["key", "value"]]).setFontWeight("bold");
+    report.push("Ops: repaired missing header row");
+  }
   var seeds = [
     ["template_client_sheet_id", ""], // Job B fills this
     ["template_guest_sheet_id", ""], // Job C fills this
@@ -701,11 +719,16 @@ function lockProtection_(protection) {
   }
 }
 
-/** True when the ID opens as a spreadsheet for this account. */
+/**
+ * True when the ID opens as a spreadsheet for this account AND is not in
+ * Drive trash. openById happily opens trashed files (and makeCopy copies
+ * them), so without the trash check the natural recovery flow — trash a
+ * botched template, re-run bootstrap — would silently keep the trashed one.
+ */
 function templateReachable_(id) {
   try {
     SpreadsheetApp.openById(id);
-    return true;
+    return !DriveApp.getFileById(id).isTrashed();
   } catch (err) {
     return false;
   }

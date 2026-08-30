@@ -78,6 +78,21 @@ function showNewClientDialog() {
 function createClient(form) {
   form = form || {};
 
+  // Serialize the whole check-then-copy-then-append sequence: two dialogs
+  // submitting at once must not both pass the slug-uniqueness check and
+  // append duplicate rows.
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) {
+    throw new Error("Another provisioning run is in progress — try again in a moment.");
+  }
+  try {
+    return createClientLocked_(form);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function createClientLocked_(form) {
   // 1. Re-validate the slug server-side — the dialog's regex is a courtesy,
   //    this is the wall.
   var slug = str_(form.slug).toLowerCase();
@@ -95,10 +110,28 @@ function createClient(form) {
     throw new Error("Template sheet IDs missing from Ops — run bootstrapTemplates() first.");
   }
 
-  var warnings = [];
   var coupleNames = str_(form.couple_names) || slug;
   var clientCopy = DriveApp.getFileById(clientTemplateId).makeCopy(coupleNames + " — Website Content");
   var guestCopy = DriveApp.getFileById(guestTemplateId).makeCopy(coupleNames + " — Guest List");
+
+  // From here on the copies exist: if anything below throws, trash them so a
+  // failed run leaves nothing behind (and a retry doesn't hand the couple
+  // duplicate sheets of which only the last pair is wired up).
+  try {
+    return createClientWithCopies_(form, slug, clientCopy, guestCopy);
+  } catch (err) {
+    try {
+      clientCopy.setTrashed(true);
+      guestCopy.setTrashed(true);
+    } catch (cleanupErr) {
+      logEvent_(slug, "script_error", "createClient cleanup failed: " + String(cleanupErr));
+    }
+    throw err;
+  }
+}
+
+function createClientWithCopies_(form, slug, clientCopy, guestCopy) {
+  var warnings = [];
 
   // 3. Share as EDITOR. Sharing failure is a warning, not a rollback — the
   //    operator can share by hand; the provisioned row must survive.
@@ -462,10 +495,13 @@ function appendClientsRow_(valueByHeader) {
 }
 
 /**
- * Friendly 2-word gate password + 2 digits (e.g. "goldenmeadow42"): easy to
- * read over the phone and to print on an invitation insert. Plaintext in the
- * admin sheet is accepted by design (HANDOFF addendum §E4) — stakes are
- * guest-level, and menuRotateGateVersion kills all cookies.
+ * Friendly gate password: two words + 4 hex chars (e.g. "goldenmeadow4f2a"),
+ * easy to read over the phone and to print on an invitation insert.
+ * Plaintext in the admin sheet is accepted by design (HANDOFF addendum §E4)
+ * — stakes are guest-level, and menuRotateGateVersion kills all cookies.
+ * The hex tail comes from Utilities.getUuid() (not Math.random) and pushes
+ * the keyspace past 10^7 so the word-word pattern can't be enumerated
+ * against the public gate login route.
  */
 function friendlyPassword_() {
   var adjectives = [
@@ -476,11 +512,15 @@ function friendlyPassword_() {
     "lake", "meadow", "willow", "garden", "harbor", "poppy", "maple", "dune",
     "clover", "canyon", "orchid", "tulip", "cedar", "brook", "petal", "fern",
   ];
-  var pick = function (list) {
-    return list[Math.floor(Math.random() * list.length)];
+  var uuidHex = Utilities.getUuid().replace(/-/g, "");
+  var pickAt = function (list, hexChar) {
+    return list[parseInt(hexChar, 16) % list.length];
   };
-  var digits = String(Math.floor(Math.random() * 90) + 10);
-  return pick(adjectives) + pick(nouns) + digits;
+  return (
+    pickAt(adjectives, uuidHex.charAt(0)) +
+    pickAt(nouns, uuidHex.charAt(1)) +
+    uuidHex.slice(2, 6)
+  );
 }
 
 /**
