@@ -37,9 +37,14 @@ function handleHealth_(slug) {
     version: SCRIPT_VERSION,
   };
 
-  var themeWarnings = [];
-  resolveTheme_(client.theme_preset, themeWarnings);
-  report.warnings = report.warnings.concat(themeWarnings);
+  // Run the REAL serve path and surface its warnings — this is what catches
+  // the content problems tab-shape checks can't see (bad URLs blanked at
+  // read time, theme field fallbacks, empty gate password, invalid expiry).
+  try {
+    report.warnings = report.warnings.concat(assembleConfigPayload_(client).warnings);
+  } catch (err) {
+    report.warnings.push("assembleConfigPayload_ threw: " + String(err));
+  }
 
   if (!client.client_sheet_id) {
     report.client_sheet = "missing client_sheet_id";
