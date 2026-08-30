@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800" role="img" aria-label="Demo photo 05">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e7da"/><stop offset="1" stop-color="#ccc0b3"/></linearGradient></defs>
+<rect width="1000" height="800" fill="url(#g)"/>
+<rect x="472" y="358" width="55" height="2" fill="#f28c52"/>
+<text x="500" y="415" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" letter-spacing="4" fill="#57534e">Demo photo 05</text>
+</svg>

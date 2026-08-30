@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "site": "demo-gated",
+  "status": "active",
+  "entitlements": {
+    "rsvp": false,
+    "gallery_premium": false,
+    "password_gate": true,
+    "things_to_do": false
+  },
+  "gate": {
+    "enabled": true,
+    "password": "preview",
+    "password_version": 1
+  },
+  "contact": {
+    "name": "Mia",
+    "phone": "(805) 555-0102"
+  },
+  "theme": {
+    "preset": "terracotta",
+    "accent_hex": "#F28C52",
+    "font_display": "Great Vibes",
+    "font_body": "Cormorant Garamond",
+    "bg": "#ffffff",
+    "bg_alt": "#fafaf9",
+    "text": "#292524",
+    "text_muted": "#57534e",
+    "button_bg": "#292524",
+    "radius": 0
+  },
+  "content": {
+    "basics": {
+      "couple_names": "Mia & Theo",
+      "wedding_date": "2027-09-18",
+      "wedding_date_display": "September 18, 2027",
+      "timezone": "America/Los_Angeles",
+      "venue_line_1": "The Fig House",
+      "venue_line_2": "Ojai, California"
+    },
+    "schedule": [
+      {
+        "label": "Saturday, September 18",
+        "events": [
+          {
+            "time": "4:30 PM",
+            "title": "Ceremony",
+            "address": "908 Grand Avenue, Ojai, CA 93023",
+            "maps_url": "https://maps.google.com/?q=908+Grand+Avenue,+Ojai,+CA+93023"
+          },
+          {
+            "time": "6:00 PM",
+            "title": "Dinner & dancing"
+          }
+        ]
+      }
+    ],
+    "travel": [
+      {
+        "hotel_name": "Hummingbird Inn",
+        "description": "A short walk from the venue — mention our wedding when you book."
+      }
+    ],
+    "faq": [
+      {
+        "question": "What should I wear?",
+        "answer": "Cocktail attire in autumn colors. The whole evening is outdoors, so flat-friendly shoes are a good idea."
+      },
+      {
+        "question": "Can I bring a plus-one?",
+        "answer": "If your invitation includes a guest, absolutely — otherwise we’ve kept the list small."
+      }
+    ],
+    "registry": [
+      {
+        "title": "Honeymoon Fund",
+        "description": "A week of hot springs and back roads in Baja.",
+        "url": "https://www.zola.com/registry/miaandtheo",
+        "button_label": "Contribute"
+      }
+    ],
+    "story": [
+      {
+        "paragraph": "We met behind the counter of a tiny Ojai bookshop — Mia was buying a field guide, Theo was mis-shelving poetry. Seven years later we still argue about who spoke first, and we’re settling it in front of everyone we love."
+      }
+    ],
+    "gallery": {
+      "layout": "grid",
+      "images": [
+        {
+          "image_url": "/demo/gallery-01.svg",
+          "caption": "Ojai in September"
+        },
+        {
+          "image_url": "/demo/gallery-02.svg"
+        },
+        {
+          "image_url": "/demo/gallery-03.svg",
+          "caption": "The bookshop",
+          "alt_text": "The bookshop where Mia and Theo met"
+        }
+      ]
+    },
+    "chrome": {}
+  },
+  "warnings": [],
+  "version": "fixture-1"
+}

@@ -1,0 +1,309 @@
+{
+  "ok": true,
+  "site": "ana-and-ben",
+  "status": "active",
+  "entitlements": {
+    "rsvp": false,
+    "gallery_premium": true,
+    "password_gate": true,
+    "things_to_do": true
+  },
+  "gate": {
+    "enabled": false,
+    "password": "",
+    "password_version": 1
+  },
+  "contact": {
+    "name": "Ana",
+    "phone": "(805) 555-0134"
+  },
+  "theme": {
+    "preset": "terracotta",
+    "accent_hex": "#F28C52",
+    "font_display": "Great Vibes",
+    "font_body": "Cormorant Garamond",
+    "bg": "#ffffff",
+    "bg_alt": "#fafaf9",
+    "text": "#292524",
+    "text_muted": "#57534e",
+    "button_bg": "#292524",
+    "radius": 0
+  },
+  "content": {
+    "basics": {
+      "couple_names": "Ana & Ben",
+      "monogram": "A & B",
+      "wedding_date": "2027-06-12",
+      "wedding_date_display": "June 12, 2027",
+      "timezone": "America/Los_Angeles",
+      "hero_tagline": "We can’t wait to celebrate with you",
+      "venue_line_1": "Rosehill Garden Estate",
+      "venue_line_2": "Santa Barbara, California",
+      "hero_image_url": "/demo/hero.svg",
+      "countdown_caption": "days until we say I do",
+      "footer_note": "With love, Ana & Ben · June 12, 2027",
+      "registry_intro": "Having you with us in Santa Barbara is the greatest gift we could ask for — please don’t feel obliged to bring anything more. If you’d like to give a gift, we’ve skipped the traditional registry in favor of two small funds."
+    },
+    "schedule": [
+      {
+        "label": "Friday, June 11 — Welcome Evening",
+        "events": [
+          {
+            "time": "5:30 PM",
+            "title": "Welcome drinks on the terrace",
+            "tag": "Welcome",
+            "detail": "Cocktails and light bites as everyone rolls in — come say hi.",
+            "address": "Rosehill Garden Estate, 1400 Olive Grove Lane, Santa Barbara, CA 93105",
+            "maps_url": "https://maps.google.com/?q=1400+Olive+Grove+Lane,+Santa+Barbara,+CA+93105"
+          },
+          {
+            "time": "7:00 PM",
+            "title": "Dinner under the string lights",
+            "detail": "Family-style paella and plenty of local wine."
+          },
+          {
+            "time": "9:30 PM",
+            "title": "Evening winds down",
+            "note": "Night owls are pointed toward the bars on State Street; everyone else, rest up for tomorrow."
+          }
+        ]
+      },
+      {
+        "label": "Saturday, June 12 — Wedding Day",
+        "events": [
+          {
+            "time": "3:00 PM",
+            "title": "Shuttle departs The Aveline Hotel",
+            "tag": "Shuttle",
+            "detail": "To Rosehill Garden Estate — please be in the lobby ten minutes early."
+          },
+          {
+            "time": "4:00 PM",
+            "title": "Ceremony in the rose garden",
+            "tag": "Ceremony",
+            "detail": "Rosehill Garden Estate",
+            "address": "1400 Olive Grove Lane, Santa Barbara, CA 93105",
+            "maps_url": "https://maps.google.com/?q=1400+Olive+Grove+Lane,+Santa+Barbara,+CA+93105",
+            "note": "The ceremony is unplugged — we’d love to see your faces, not your phones."
+          },
+          {
+            "time": "5:00 PM",
+            "title": "Cocktail hour on the citrus lawn",
+            "tag": "Cocktails",
+            "detail": "Aperitifs, oysters, and lawn games while we sneak off for photos."
+          },
+          {
+            "time": "6:30 PM",
+            "title": "Dinner & toasts",
+            "tag": "Reception",
+            "detail": "In the glasshouse."
+          },
+          {
+            "time": "8:30 PM",
+            "title": "Dancing",
+            "tag": "Reception",
+            "detail": "Bring your requests — the band takes them."
+          },
+          {
+            "time": "10:30 PM",
+            "title": "Sparkler send-off",
+            "note": "Sparklers provided — meet us on the front drive."
+          },
+          {
+            "time": "11:00 PM",
+            "title": "Shuttles return to The Aveline Hotel",
+            "tag": "Shuttle",
+            "note": "Two departures: 11:00 PM and 11:45 PM sharp."
+          }
+        ]
+      }
+    ],
+    "travel": [
+      {
+        "hotel_name": "The Aveline Hotel",
+        "description": "Our home base for the weekend — a ten-minute drive from the estate, and where every shuttle picks up and drops off. We’ve reserved a block of rooms for Friday and Saturday nights.",
+        "address": "746 Anacapa Street, Santa Barbara, CA 93101",
+        "phone": "(805) 555-0177",
+        "block_name": "Ana & Ben Wedding Room Block",
+        "group_code": "ANABEN612",
+        "booking_url": "https://www.example.com/aveline/groups/anaben612",
+        "button_label": "Book the Room Block"
+      },
+      {
+        "hotel_name": "Mission Rose Inn",
+        "description": "A smaller, quieter option near the old mission — pretty courtyard, great breakfast, book directly.",
+        "address": "212 Los Olivos Street, Santa Barbara, CA 93105",
+        "phone": "(805) 555-0148"
+      }
+    ],
+    "things_to_do": [
+      {
+        "category": "Dining",
+        "name": "La Super-Rica Taqueria",
+        "blurb": "The line is worth it — get the rajas.",
+        "url": "https://maps.google.com/?q=La+Super-Rica+Taqueria,+Santa+Barbara"
+      },
+      {
+        "category": "Dining",
+        "name": "Loquita",
+        "blurb": "Spanish tapas by the Funk Zone; book ahead.",
+        "url": "https://maps.google.com/?q=Loquita,+Santa+Barbara"
+      },
+      {
+        "category": "Dining",
+        "name": "Brophy Bros.",
+        "blurb": "Chowder and a harbor view."
+      },
+      {
+        "category": "Outdoors",
+        "name": "Butterfly Beach",
+        "blurb": "Sunset swims, no crowds."
+      },
+      {
+        "category": "Outdoors",
+        "name": "Douglas Family Preserve",
+        "blurb": "Bluff-top loop with the best ocean views in town.",
+        "url": "https://maps.google.com/?q=Douglas+Family+Preserve,+Santa+Barbara"
+      },
+      {
+        "category": "Outdoors",
+        "name": "Old Mission Rose Garden",
+        "blurb": "Where Ben proposed — the roses peak in June."
+      },
+      {
+        "category": "Wine tasting",
+        "name": "Funk Zone tasting rooms",
+        "blurb": "A dozen tasting rooms in three walkable blocks."
+      },
+      {
+        "category": "Wine tasting",
+        "name": "Los Olivos day trip",
+        "blurb": "Forty minutes north — tastings, olive oil, and one very good bakery."
+      }
+    ],
+    "faq": [
+      {
+        "question": "What should I wear?",
+        "answer": "## Welcome Evening\nGarden casual — sundresses, linen shirts, light layers for the evening breeze. No jackets required.\n\n## Ceremony & Reception\nGarden formal: midi or floor-length dresses, suits or a blazer with trousers. Ties optional, seasonal colors encouraged.\n\nnote: The ceremony and cocktail hour are on grass — block heels and wedges will be much happier than stilettos."
+      },
+      {
+        "question": "Is the wedding indoors or outdoors?",
+        "answer": "A little of both — and all on one property.\n\n- Ceremony: outdoors in the rose garden\n- Cocktail hour: outdoors on the citrus lawn\n- Dinner & dancing: inside the glasshouse\n\nSanta Barbara evenings cool off fast once the sun drops, so bring a light layer for after dark."
+      },
+      {
+        "question": "How do we get to the estate? Is there parking?",
+        "answer": "The easiest way is the shuttle — it leaves from The Aveline Hotel at 3:00 PM and brings everyone back at the end of the night.\n\nIf you’d rather drive, there is on-site parking at the estate, and cars may be left overnight and collected by noon Sunday.\n\nnote: Shuttle route: The Aveline Hotel → Rosehill Garden Estate → The Aveline Hotel. Return departures at 11:00 PM and 11:45 PM."
+      },
+      {
+        "question": "Can I bring a plus-one?",
+        "answer": "Plus-ones are by invitation only — if your invitation includes a guest, their name (or “and guest”) appears on the envelope. We wish we could host everyone, but the glasshouse only holds so many."
+      },
+      {
+        "question": "Are kids invited?",
+        "answer": "We love your little ones, but apart from the children in our own families this is an adults-only celebration. Consider it a night off — the dance floor will thank you."
+      },
+      {
+        "question": "When should we RSVP by?",
+        "answer": "Please reply by May 1, 2027. Our caterer needs final counts well ahead of the weekend, so we sadly can’t accommodate responses after that date.\n\nIf your plans change after you reply, just call Ana at (805) 555-0134."
+      }
+    ],
+    "registry": [
+      {
+        "title": "Honeymoon Fund",
+        "description": "Two weeks of slow trains, small towns, and long lunches along the Amalfi Coast.",
+        "url": "https://www.zola.com/registry/anaandben",
+        "button_label": "Contribute"
+      },
+      {
+        "title": "First Home Fund",
+        "description": "Help us trade our one-closet apartment for a place with room for the piano.",
+        "url": "https://www.honeyfund.com/wedding/ana-and-ben",
+        "button_label": "Contribute"
+      }
+    ],
+    "story": [
+      {
+        "paragraph": "We met in the spring of 2021, in the back row of a Tuesday-night pottery class neither of us had planned to attend alone. Ana was there because her sister gifted her the course; Ben was there because his roommate bailed at the last minute. Her first bowl collapsed on the wheel. His exploded in the kiln. We have been laughing at the same disasters ever since.",
+        "image_url": "/demo/story-1.svg"
+      },
+      {
+        "paragraph": "Our first real date was a farmers-market breakfast that turned into an all-day drive up the coast — windows down, one shared playlist, no plan past lunch. Somewhere past Gaviota we realized we had been talking for nine hours straight. Two years, one small apartment, and one very opinionated cat later, that coast drive had become our anniversary tradition."
+      },
+      {
+        "heading": "The proposal",
+        "paragraph": "Last October, Ben suggested a sunset walk through the rose garden by the old mission — the same garden we had wandered on our third date. He had recruited Ana’s best friend to hide behind a hedge with a camera, forgot every word of the speech he had practiced for weeks, and managed only the one question that mattered. She said yes before he finished asking.",
+        "image_url": "/demo/story-2.svg"
+      },
+      {
+        "paragraph": "Now we’re getting married under the oaks at Rosehill, ten minutes from where it all clicked into place, with the people we love most in the world. Thank you for being part of our story — we can’t wait to see you in June."
+      }
+    ],
+    "gallery": {
+      "layout": "editorial",
+      "images": [
+        {
+          "image_url": "/demo/gallery-01.svg",
+          "caption": "Golden hour on the bluffs",
+          "alt_text": "Ana and Ben on the bluffs at golden hour"
+        },
+        {
+          "image_url": "/demo/gallery-02.svg",
+          "caption": "Pottery class, week one"
+        },
+        {
+          "image_url": "/demo/gallery-03.svg",
+          "caption": "The coast drive",
+          "alt_text": "Highway 1 out the passenger window"
+        },
+        {
+          "image_url": "/demo/gallery-04.svg",
+          "caption": "Sunday mornings"
+        },
+        {
+          "image_url": "/demo/gallery-05.svg"
+        },
+        {
+          "image_url": "/demo/gallery-06.svg",
+          "caption": "Josie the cat, unimpressed"
+        },
+        {
+          "image_url": "/demo/gallery-07.svg",
+          "caption": "The night he asked",
+          "alt_text": "The proposal in the mission rose garden"
+        },
+        {
+          "image_url": "/demo/gallery-08.svg",
+          "caption": "She said yes"
+        },
+        {
+          "image_url": "/demo/gallery-09.svg",
+          "alt_text": "Celebratory dinner with both families"
+        },
+        {
+          "image_url": "/demo/gallery-10.svg",
+          "caption": "The engagement party"
+        },
+        {
+          "image_url": "/demo/gallery-11.svg",
+          "caption": "Scouting the venue"
+        },
+        {
+          "image_url": "/demo/gallery-12.svg"
+        },
+        {
+          "image_url": "/demo/gallery-13.svg",
+          "caption": "Menu tasting — a hard job",
+          "alt_text": "Tasting plates lined up at the caterer"
+        },
+        {
+          "image_url": "/demo/gallery-14.svg",
+          "caption": "See you in June",
+          "alt_text": "Ana and Ben walking through the Rosehill olive grove"
+        }
+      ]
+    },
+    "chrome": {}
+  },
+  "warnings": [],
+  "version": "fixture-1"
+}
