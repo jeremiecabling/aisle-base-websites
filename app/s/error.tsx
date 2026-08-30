@@ -3,11 +3,13 @@
 import { useEffect } from "react"
 
 /**
- * Tenant error boundary. A config failure with no last-known-good lands
- * here — the guest sees a calm holding page, the operator sees the real
- * error in the Vercel logs (lib/config.ts throws loudly and specifically).
- * Static English on purpose: config (and chrome strings) are exactly what
- * we failed to load.
+ * Tenant error boundary. Lives at app/s/ — ABOVE the [site] layout — because
+ * an error boundary only catches segments below it, and the config fetch
+ * (the thing most likely to throw) happens in the [site] layout itself. A
+ * config failure with no last-known-good lands here: the guest sees a calm
+ * holding page, the operator sees the real error in the Vercel logs
+ * (lib/config.ts throws loudly and specifically). Static English on
+ * purpose: config (and chrome strings) are exactly what we failed to load.
  */
 export default function TenantError({
   error,

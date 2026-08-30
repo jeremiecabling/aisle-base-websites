@@ -22,8 +22,8 @@ export function Registry({
     <Section id="registry">
       <SectionHeader title={heading} subtitle={intro} />
       <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
-        {items.map((item) => (
-          <Card key={item.title}>
+        {items.map((item, i) => (
+          <Card key={`${i}-${item.title}`}>
             <CardContent className="space-y-4">
               <h3 className="text-xl font-body text-ink">{item.title}</h3>
               {item.description ? (

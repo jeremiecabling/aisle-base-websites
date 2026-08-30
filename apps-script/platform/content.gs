@@ -105,6 +105,27 @@ function isHttps_(url) {
   return /^https:\/\//.test(String(url || "").trim());
 }
 
+/**
+ * Sanitize a couple-typed link so ONE bad cell degrades that one field
+ * instead of failing the whole payload against the Next-side schema (the
+ * §5 bug-5 family: a stray edit must mean stale-but-up, never down).
+ * Returns "" (and pushes a warning naming the cell) for anything that is
+ * not https:// — with `allowRelative`, site-relative /paths also pass
+ * (fixture/demo assets).
+ */
+function safeUrl_(value, allowRelative, warnings, label) {
+  var v = String(value || "").trim();
+  if (!v) return "";
+  if (isHttps_(v) || (allowRelative && v.charAt(0) === "/")) return v;
+  warnings.push(label + ' is not an https:// link — ignored ("' + v.slice(0, 80) + '")');
+  return "";
+}
+
+/** normalizeImageUrl_ + the https/relative guard, as one step. */
+function safeImageUrl_(value, warnings, label) {
+  return safeUrl_(normalizeImageUrl_(value), true, warnings, label);
+}
+
 /** Locked-KV tab → { key: value } map (values as trimmed strings). */
 function readKvTab_(spreadsheet, tabName, warnings) {
   var sheet = spreadsheet.getSheetByName(tabName);
@@ -169,22 +190,28 @@ function readTableTab_(spreadsheet, tabName, warnings) {
   return rows;
 }
 
-/** Consecutive equal day_labels → one accordion day (HANDOFF §7.3). */
-function groupScheduleDays_(rows) {
+/**
+ * Equal day_labels → one accordion day, first-seen order (HANDOFF §7.3 says
+ * "consecutive", but interleaved same-label rows must merge too — duplicate
+ * labels would collide on the renderer's accordion values).
+ */
+function groupScheduleDays_(rows, warnings) {
   var days = [];
-  var current = null;
+  var byLabel = {};
   rows.forEach(function (row) {
-    if (!current || current.label !== row.day_label) {
-      current = { label: row.day_label, events: [] };
-      days.push(current);
+    var day = byLabel[row.day_label];
+    if (!day) {
+      day = { label: row.day_label, events: [] };
+      byLabel[row.day_label] = day;
+      days.push(day);
     }
-    current.events.push({
+    day.events.push({
       time: row.time,
       title: row.title,
       tag: row.tag,
       detail: row.detail,
       address: row.address,
-      maps_url: isHttps_(row.maps_url) ? row.maps_url : "",
+      maps_url: safeUrl_(row.maps_url, false, warnings, "Schedule maps_url for \"" + row.title + "\""),
       note: row.note,
     });
   });
@@ -265,6 +292,12 @@ function assembleConfigPayload_(client) {
   if (!client.contact_name && !client.contact_phone) {
     warnings.push("contact_name/contact_phone empty (guest-facing banners will omit contact)");
   }
+  if (client.expires_at_invalid) {
+    warnings.push("expires_at is set but unparseable — TERM ENFORCEMENT IS OFF for this client until it is fixed");
+  }
+  if (client.gate_password_version_invalid) {
+    warnings.push("gate_password_version is not a number — treated as 1 (a rotation may not have taken effect)");
+  }
 
   return payload;
 }
@@ -281,8 +314,8 @@ function readClientContent_(spreadsheet, entitlements, client, warnings) {
     hero_tagline: kv.hero_tagline || "",
     venue_line_1: kv.venue_line_1 || "",
     venue_line_2: kv.venue_line_2 || "",
-    hero_image_url: normalizeImageUrl_(kv.hero_image_url),
-    gate_video_url: kv.gate_video_url || "",
+    hero_image_url: safeImageUrl_(kv.hero_image_url, warnings, "Basics.hero_image_url"),
+    gate_video_url: safeUrl_(kv.gate_video_url, false, warnings, "Basics.gate_video_url"),
     countdown_caption: kv.countdown_caption || "",
     registry_intro: kv.registry_intro || "",
     footer_note: kv.footer_note || "",
@@ -295,7 +328,7 @@ function readClientContent_(spreadsheet, entitlements, client, warnings) {
 
   var content = {
     basics: basics,
-    schedule: groupScheduleDays_(readTableTab_(spreadsheet, "Schedule", warnings)),
+    schedule: groupScheduleDays_(readTableTab_(spreadsheet, "Schedule", warnings), warnings),
     travel: readTableTab_(spreadsheet, "Travel", warnings).map(function (row) {
       return {
         hotel_name: row.hotel_name,
@@ -304,7 +337,7 @@ function readClientContent_(spreadsheet, entitlements, client, warnings) {
         phone: row.phone,
         block_name: row.block_name,
         group_code: row.group_code,
-        booking_url: isHttps_(row.booking_url) ? row.booking_url : "",
+        booking_url: safeUrl_(row.booking_url, false, warnings, 'Travel booking_url for "' + row.hotel_name + '"'),
         button_label: row.button_label,
       };
     }),
@@ -329,7 +362,7 @@ function readClientContent_(spreadsheet, entitlements, client, warnings) {
       return {
         heading: row.heading,
         paragraph: row.paragraph,
-        image_url: normalizeImageUrl_(row.image_url),
+        image_url: safeImageUrl_(row.image_url, warnings, "Story image_url"),
       };
     }),
     chrome: {},
@@ -337,16 +370,29 @@ function readClientContent_(spreadsheet, entitlements, client, warnings) {
 
   // Parsed only when entitled (§7.3) — key omitted entirely otherwise.
   if (entitlements.things_to_do) {
-    content.things_to_do = readTableTab_(spreadsheet, "Things To Do", warnings);
+    content.things_to_do = readTableTab_(spreadsheet, "Things To Do", warnings).map(function (row) {
+      return {
+        category: row.category,
+        name: row.name,
+        blurb: row.blurb,
+        url: safeUrl_(row.url, false, warnings, 'Things To Do url for "' + row.name + '"'),
+      };
+    });
   }
 
-  var galleryRows = readTableTab_(spreadsheet, "Gallery", warnings).map(function (row) {
-    return {
-      image_url: normalizeImageUrl_(row.image_url),
-      caption: row.caption,
-      alt_text: row.alt_text,
-    };
-  });
+  // Gallery image_url is REQUIRED per row — a bad link drops the row (with
+  // a warning) rather than emitting an empty src the schema would reject.
+  var galleryRows = readTableTab_(spreadsheet, "Gallery", warnings)
+    .map(function (row, index) {
+      return {
+        image_url: safeImageUrl_(row.image_url, warnings, "Gallery row " + (index + 2) + " image_url"),
+        caption: row.caption,
+        alt_text: row.alt_text,
+      };
+    })
+    .filter(function (row) {
+      return row.image_url !== "";
+    });
   if (galleryRows.length > 0) {
     var cap = entitlements.gallery_premium ? GALLERY_CAP_PREMIUM : GALLERY_CAP_BASE;
     if (galleryRows.length > cap) {

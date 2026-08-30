@@ -17,17 +17,26 @@ import { resolveSlugFromSubdomain } from "@/lib/tenant"
  * constant-time (HANDOFF §5 bug 7: the legacy route used !==).
  */
 export async function POST(request: NextRequest) {
-  let body: { password?: unknown; slug?: unknown }
+  let parsed: unknown
   try {
-    body = await request.json()
+    parsed = await request.json()
   } catch {
     return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 })
   }
+  if (typeof parsed !== "object" || parsed === null) {
+    // JSON.parse("null") etc. — reject before property access.
+    return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 })
+  }
+  const body = parsed as { password?: unknown; slug?: unknown }
 
   const password = typeof body.password === "string" ? body.password : ""
   const bodySlug =
     typeof body.slug === "string" && /^[a-z0-9-]{1,63}$/.test(body.slug) ? body.slug : null
-  const slug = resolveSlugFromSubdomain(request.headers.get("host") ?? "") ?? bodySlug
+  // Body slug first: it names the gate screen the guest is actually looking
+  // at (path-based /s/<slug> access can differ from the request host, and the
+  // password itself is the credential — the slug only selects which password
+  // to check and which cookie to mint).
+  const slug = bodySlug ?? resolveSlugFromSubdomain(request.headers.get("host") ?? "")
 
   if (!slug || !password) {
     return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 })

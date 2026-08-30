@@ -6,6 +6,9 @@ import { tenantFontCss } from "@/lib/fonts"
  * /s/<slug> before this route is reached.
  */
 export default function ApexLanding() {
+  // Env-driven: the brand's real domain/addresses are still open (Q9) — no
+  // hardcoded contact details until they exist.
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim()
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-canvas px-6 text-center">
       <style dangerouslySetInnerHTML={{ __html: tenantFontCss("Great Vibes", "Cormorant Garamond") }} />
@@ -15,11 +18,16 @@ export default function ApexLanding() {
         Beautifully designed, personally managed wedding websites. You share your story — we
         handle everything else.
       </p>
-      <p className="font-body text-lg text-ink-muted mt-10">
-        <a href="mailto:hello@aislebase.com" className="underline decoration-accent underline-offset-4 hover:text-ink transition-colors">
-          Get in touch
-        </a>
-      </p>
+      {contactEmail ? (
+        <p className="font-body text-lg text-ink-muted mt-10">
+          <a
+            href={`mailto:${contactEmail}`}
+            className="underline decoration-accent underline-offset-4 hover:text-ink transition-colors"
+          >
+            Get in touch
+          </a>
+        </p>
+      ) : null}
     </main>
   )
 }

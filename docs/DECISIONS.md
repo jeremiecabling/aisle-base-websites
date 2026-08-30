@@ -92,4 +92,19 @@ and this file disagree, this file wins — fix the code.
 9. The `ok:false` refusal set is exactly {secret_mismatch, unknown_site, unknown_action,
    script_error, rsvp_not_implemented}; content problems always ship as `ok:true` best-effort
    payloads with `warnings[]` so the Next side (zod + last-known-good) decides servability —
-   a couple's stray mid-edit deletion degrades to stale-but-up, not down.
+   a couple's stray mid-edit deletion degrades to stale-but-up, not down. To honor that,
+   every couple-typed URL is sanitized at read time (bad link → that field blanked/row
+   dropped + warning), and the theme resolves field-by-field against a hardcoded terracotta
+   fallback — one bad cell must never fail the whole payload.
+10. Q11's "reuse countdown_caption" for the day-0 message is deliberately amended: day 0
+   renders the operator-editable chrome key `countdown_today` ("Today's the day!") — the
+   caption ("days until we say I do") reads wrong as a day-0 line. `countdown_caption`
+   remains the under-the-number caption.
+11. Demo coverage note (Q7): the committed demo fixtures exercise `editorial` (premium) and
+   `grid` (base) gallery layouts; masonry and filmstrip were visually QA'd against temporary
+   fixture variants during the build but have no permanent fixture. Add fixtures if the Etsy
+   listing needs screenshots of all four.
+12. An entitled gate with a blank `gate_password` fails CLOSED: the script emits
+   `enabled: true` + empty password, the schema rejects it, and the platform serves
+   last-known-good (still gated). Turning a gate off = unchecking `mod_password_gate`.
+   Term expiry downgrades both rendering states (`active` and `staging`).

@@ -101,10 +101,16 @@ function handleDomains_() {
   var domains = {};
   var slugs = [];
   clients.forEach(function (client) {
-    if (effectiveStatus_(client) !== "active") return;
-    slugs.push(client.slug);
+    // The domains map includes EVERY status: middleware only resolves
+    // host→slug; the tenant layout is what enforces status. Dropping a
+    // paused/expired tenant here would show its guests the apex landing
+    // instead of the status screen (and make staging previews on custom
+    // domains impossible).
     if (client.custom_domain) {
       domains[client.custom_domain.toLowerCase()] = client.slug;
+    }
+    if (effectiveStatus_(client) === "active") {
+      slugs.push(client.slug);
     }
   });
 

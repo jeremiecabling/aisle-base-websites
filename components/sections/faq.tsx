@@ -26,10 +26,12 @@ export function Faq({ heading, items }: { heading: string; items: FaqItem[] }) {
     <Section id="faqs">
       <SectionHeader title={heading} className="mb-16" />
       <Accordion.Root type="single" collapsible className="space-y-4">
-        {items.map((item) => (
+        {items.map((item, i) => (
           <Accordion.Item
-            key={item.question}
-            value={item.question}
+            // Index-composite: duplicate questions in the sheet must not
+            // collide as Radix values/React keys.
+            key={`${i}-${item.question}`}
+            value={`${i}-${item.question}`}
             className="border border-ink/10 bg-canvas rounded-tenant overflow-hidden"
           >
             <Accordion.Header>

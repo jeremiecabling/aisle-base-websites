@@ -24,8 +24,8 @@ export function Travel({
     <Section id="travel">
       <SectionHeader title={heading} className="mb-8" />
       <div className="max-w-2xl mx-auto space-y-12 text-center">
-        {items.map((item) => (
-          <HotelBlock key={item.hotel_name} item={item} bookButtonLabel={bookButtonLabel} />
+        {items.map((item, i) => (
+          <HotelBlock key={`${i}-${item.hotel_name}`} item={item} bookButtonLabel={bookButtonLabel} />
         ))}
       </div>
     </Section>

@@ -36,8 +36,8 @@ export function ThingsToDo({ heading, items }: { heading: string; items: ThingTo
             </Accordion.Header>
             <Accordion.Content className="accordion-content overflow-hidden px-6 pb-6 pt-2">
               <div className="divide-y divide-ink/10">
-                {group.items.map((item) => (
-                  <SpotRow key={item.name} item={item} />
+                {group.items.map((item, i) => (
+                  <SpotRow key={`${i}-${item.name}`} item={item} />
                 ))}
               </div>
             </Accordion.Content>

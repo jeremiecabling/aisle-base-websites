@@ -33,6 +33,15 @@ export function resolveSlugFromSubdomain(rawHost: string): string | null {
   return SLUG_RE.test(label) ? label : null
 }
 
+/**
+ * The domains map is remote data — validate anything from it before it is
+ * spliced into a rewrite path (never trust a map value to be a slug, and
+ * `Record` lookups can also surface prototype keys).
+ */
+function validSlugOrNull(value: string | undefined): string | null {
+  return typeof value === "string" && SLUG_RE.test(value) ? value : null
+}
+
 type DomainsMemo = { domains: Record<string, string>; fetchedAt: number }
 
 function domainsMemo(): { current?: DomainsMemo } {
@@ -57,7 +66,7 @@ export async function resolveSlugFromCustomDomain(rawHost: string): Promise<stri
 
   const memo = domainsMemo()
   if (memo.current && Date.now() - memo.current.fetchedAt < DOMAINS_TTL_MS) {
-    return memo.current.domains[host] ?? null
+    return validSlugOrNull(memo.current.domains[host])
   }
 
   try {
@@ -78,7 +87,7 @@ export async function resolveSlugFromCustomDomain(rawHost: string): Promise<stri
     ) {
       const domains = (body as { domains: Record<string, string> }).domains
       memo.current = { domains, fetchedAt: Date.now() }
-      return domains[host] ?? null
+      return validSlugOrNull(domains[host])
     }
     console.error(`[tenant-domains] domains map refused or malformed for host ${host}`)
     return null

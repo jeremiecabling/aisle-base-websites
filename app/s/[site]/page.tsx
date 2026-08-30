@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { Countdown } from "@/components/sections/countdown"
+import { daysUntilInTimezone } from "@/lib/countdown"
 import { Faq } from "@/components/sections/faq"
 import { Footer } from "@/components/sections/footer"
 import { GallerySection } from "@/components/sections/gallery"
@@ -57,6 +58,7 @@ export default async function TenantPage({ params }: { params: Promise<{ site: s
       <Countdown
         weddingDate={basics.wedding_date}
         timezone={basics.timezone}
+        initialDays={daysUntilInTimezone(basics.wedding_date, basics.timezone)}
         caption={basics.countdown_caption ?? chrome(content, "countdown_days")}
         todayMessage={chrome(content, "countdown_today")}
       />

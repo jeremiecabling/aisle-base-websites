@@ -25,6 +25,8 @@ function handleHealth_(slug) {
       things_to_do: client.mod_things_to_do,
     },
     gate_configured: client.mod_password_gate ? client.gate_password !== "" : null,
+    expires_at_invalid: client.expires_at_invalid === true,
+    gate_password_version_invalid: client.gate_password_version_invalid === true,
     contact_present: Boolean(client.contact_name || client.contact_phone),
     theme_preset: client.theme_preset,
     tabs: {},

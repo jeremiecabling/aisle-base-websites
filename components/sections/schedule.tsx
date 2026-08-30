@@ -19,10 +19,12 @@ export function Schedule({ heading, days }: { heading: string; days: ScheduleDay
     <Section id="schedule">
       <SectionHeader title={heading} className="mb-16" />
       <Accordion.Root type="single" collapsible className="space-y-4">
-        {populated.map((day) => (
+        {populated.map((day, i) => (
           <Accordion.Item
-            key={day.label}
-            value={day.label}
+            // Index-composite: sheet content can legitimately repeat labels,
+            // and duplicate Radix values would open/close items in lockstep.
+            key={`${i}-${day.label}`}
+            value={`${i}-${day.label}`}
             className="border border-ink/10 bg-canvas rounded-tenant overflow-hidden"
           >
             <Accordion.Header>

@@ -17,7 +17,9 @@ export function Hero({ basics }: { basics: Basics }) {
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-canvas-alt" />
+          // No hero photo: dark ground so the white-over-media text (and the
+          // nav's unscrolled white palette) stays readable.
+          <div className="absolute inset-0 bg-button" />
         )}
         <div className="absolute inset-0 bg-black/20" />
       </div>
