@@ -34,6 +34,7 @@ export const CHROME_DEFAULTS = {
   story_heading: "Our Story",
   gallery_heading: "Gallery",
 
+  gate_prompt: "Please enter the password to view our wedding website",
   gate_placeholder: "Enter password",
   gate_submit: "Enter",
   gate_error: "That password isn't right — try again.",

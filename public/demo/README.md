@@ -1,0 +1,3 @@
+# Demo placeholder art
+
+Everything in this directory is a committed SVG placeholder — soft gradient washes in the terracotta preset's palette with a "Demo photo NN" label — that exists so the `ana-and-ben` and `demo-gated` fixture tenants render fully with zero external dependencies. Before taking the Etsy listing screenshots (addendum Q7), the operator swaps these for 8–12 rights-cleared photos (own shots, purchased stock, or generated — never a real couple's images) using the same filenames, and uploads a short gate-video clip to the platform's Vercel Blob store, pasting its URL into the demo tenant's `gate_video_url` (Q14 — Drive does not stream video reliably, and there is no in-app upload in v1).

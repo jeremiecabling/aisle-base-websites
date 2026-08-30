@@ -79,3 +79,17 @@ and this file disagree, this file wins — fix the code.
 5. Bug-list conformance is enforced structurally where possible: zod schema rejects
    entitlement/payload drift (bug 4), config loader hard-fails on `!body.ok` (bug 5), gallery
    caps validated (bug 2 class), no format sniffing anywhere (bug 1).
+6. `status = "staging"` renders the full site (it exists so a couple previews before the flip
+   to active; every tenant page is already noindex). Only `paused`/`expired` block rendering.
+   §7.4's "status !== active → expired/paused page" is read as applying to those two states.
+7. `Basics.registry_intro` (optional KV key) added beyond §7.3 — the live design shows intro
+   copy under the Registry heading and the spec gave that string no home.
+8. Gate/status screens REPLACE the page server-side in `app/s/[site]/layout.tsx` — no
+   `/password` or `/expired` routes (§7.1 tree listed them). No redirect, no URL change, and
+   nothing gated is ever serialized toward the browser; `ok:false` from the script and schema
+   failures split into authoritative refusals (throw) vs transient degradation
+   (last-known-good + loud logs) as documented in `lib/config.ts`.
+9. The `ok:false` refusal set is exactly {secret_mismatch, unknown_site, unknown_action,
+   script_error, rsvp_not_implemented}; content problems always ship as `ok:true` best-effort
+   payloads with `warnings[]` so the Next side (zod + last-known-good) decides servability —
+   a couple's stray mid-edit deletion degrades to stale-but-up, not down.
