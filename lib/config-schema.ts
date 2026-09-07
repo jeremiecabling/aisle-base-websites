@@ -77,9 +77,11 @@ export const gateSchema = z.object({
 
 export const contactSchema = z.object({
   // The COUPLE's preferred human contact for guest-facing banners — not the
-  // operator (addendum Q23a).
-  name: requiredTrimmed,
-  phone: requiredTrimmed,
+  // operator (addendum Q23a). May be blank (script emits a warning; screens
+  // that would show it omit the line) — a missing phone number must not take
+  // a site down.
+  name: z.string().transform((s) => s.trim()),
+  phone: z.string().transform((s) => s.trim()),
 })
 
 // Fonts must come from the self-hosted OFL whitelist (lib/fonts.ts mirrors
@@ -118,6 +120,9 @@ export const basicsSchema = z.object({
   gate_video_url: optionalHttpsUrl,
   countdown_caption: optionalTrimmed,
   footer_note: optionalTrimmed,
+  // Live design shows intro copy under the Registry heading; §7.3 gave it no
+  // home, so it lives as an optional Basics key (see docs/DECISIONS.md).
+  registry_intro: optionalTrimmed,
   // NOTE: no rsvp_deadline_display — the displayed deadline comes from the
   // guest sheet's Settings.rsvp_deadline, single source of truth (Q19).
 })

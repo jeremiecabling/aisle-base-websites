@@ -10,7 +10,17 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "apps-script/**"],
+    ignores: ["node_modules/**", ".next/**", "out/**", "apps-script/**", "next-env.d.ts"],
+  },
+  {
+    rules: {
+      // Leading underscore = intentionally discarded (e.g. stripping `gate`
+      // from the public config).
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
+      ],
+    },
   },
 ]
 
