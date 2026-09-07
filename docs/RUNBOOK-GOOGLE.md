@@ -26,14 +26,22 @@ ones people get wrong.
 
 ## 3. Push the code
 
-With clasp:
+With clasp (no `clasp clone` needed — write `.clasp.json` directly;
+`fileExtension: "gs"` makes clasp push this repo's `.gs` files as-is):
 
 ```bash
 cd apps-script/platform
-clasp clone <SCRIPT_ID>   # Script ID: Apps Script editor → Project Settings
-# clasp clone pulls the empty remote files; delete what it pulled EXCEPT .clasp.json, then:
-clasp push -f             # pushes appsscript.json + all .gs files
+cat > .clasp.json <<'EOF'
+{"scriptId":"<SCRIPT_ID>","rootDir":".","fileExtension":"gs"}
+EOF
+clasp push -f   # pushes appsscript.json + all 8 .gs files; accept the
+                # manifest-overwrite prompt (our appsscript.json must win —
+                # it carries the 5 required OAuth scopes)
 ```
+
+Script ID: Apps Script editor → Project Settings. The production ADMIN
+sheet's bound script (created 2026-09-07) is
+`1GcYK48gW-Sp_-DZntDMVeo_ioNAfMODwggXeTzVzVFWyPxV3sqrjT4ZA`.
 
 (`.clasp.json` is gitignored — never commit it.)
 
